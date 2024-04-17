@@ -1,31 +1,37 @@
+import { RecursiveCharacterTextSplitter } from "langchain/text_splitter";
+import { SupabaseVectorStore } from "@langchain/community/vectorstores/supabase";
+import { OpenAIEmbeddings } from "@langchain/openai";
+import fs from "fs/promises";
+import { createClient } from "@supabase/supabase-js";
 import "dotenv/config";
 
-document.addEventListener("submit", (e) => {
-  e.preventDefault();
-  progressConversation();
-});
+try {
+  const result = await fs.readFile("101.txt", "utf8");
+  const text = await result.toString();
+  const splitter = new RecursiveCharacterTextSplitter({
+    chunkSize: 500,
+    separators: ["\n\n", "\n", " ", ""],
+    chunkOverlap: 50,
+  });
 
-const openAIApiKey = process.env.OPENAI_API_KEY;
+  const output = await splitter.createDocuments([text]);
 
-const progressConversation = async () => {
-  const userInput = document.getElementById("user-input");
-  const chatbotConversation = document.getElementById(
-    "chatbot-conversation-container"
+  const sbApiKey = process.env.SUPABASE_KEY;
+  //   console.log("sbApiKey :>> ", sbApiKey);
+  const sbUrl = process.env.SUPABASE_URL;
+  const openAIApiKey = process.env.OPENAI_API_KEY;
+
+  const client = createClient(sbUrl, sbApiKey);
+
+  await SupabaseVectorStore.fromDocuments(
+    output,
+    new OpenAIEmbeddings({ openAIApiKey: openAIApiKey }),
+    {
+      client: client,
+      tableName: "documents",
+    }
   );
-  const question = userInput.value;
-  userInput.value = "";
-
-  //add human message
-  const newHumanSpeechBubble = document.createElement("div");
-  newHumanSpeechBubble.classList.add("speech", "speech-human");
-  chatbotConversation.appendChild(newHumanSpeechBubble);
-  newHumanSpeechBubble.textContent = question;
-  chatbotConversation.scrollTop = chatbotConversation.scrollHeight;
-
-  //add AI message
-  const newAiSpeechBubble = document.createElement("div");
-  newAiSpeechBubble.classList.add("speech", "speech-ai");
-  chatbotConversation.appendChild(newAiSpeechBubble);
-  newAiSpeechBubble.textContent = result;
-  chatbotConversation.scrollTop = chatbotConversation.scrollHeight;
-};
+  console.log(output);
+} catch (error) {
+  console.log(error);
+}
