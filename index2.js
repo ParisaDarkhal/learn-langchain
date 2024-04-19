@@ -8,6 +8,7 @@ import { OpenAIEmbeddings } from "@langchain/openai";
 import fs from "fs/promises";
 import { createClient } from "@supabase/supabase-js";
 import { StringOutputParser } from "@langchain/core/output_parsers";
+import { retriever } from "./utils/retriever";
 ///
 
 const openAIApiKey = process.env.OPENAI_API_KEY;
@@ -21,19 +22,19 @@ const openAIApiKey = process.env.OPENAI_API_KEY;
 //a string holding the phrasing of the prompt
 
 ///
-const embeddings = new OpenAIEmbeddings({ openAIApiKey });
+// const embeddings = new OpenAIEmbeddings({ openAIApiKey });
 
-const sbApiKey = process.env.SUPABASE_KEY;
-const sbUrl = process.env.SUPABASE_URL;
-const client = createClient(sbUrl, sbApiKey);
+// const sbApiKey = process.env.SUPABASE_KEY;
+// const sbUrl = process.env.SUPABASE_URL;
+// const client = createClient(sbUrl, sbApiKey);
 
-const vectorStore = new SupabaseVectorStore(embeddings, {
-  client,
-  tableName: "documents",
-  queryName: "match_documents",
-});
+// const vectorStore = new SupabaseVectorStore(embeddings, {
+//   client,
+//   tableName: "documents",
+//   queryName: "match_documents",
+// });
 
-const retriever = vectorStore.asRetriever();
+// const retriever = vectorStore.asRetriever();
 
 const llm = new ChatOpenAI({ openAIApiKey });
 ///
@@ -44,6 +45,16 @@ const standaloneQuestionTemplate = `Given a question, convert it into a standalo
 const standaloneQuestionPrompt = PromptTemplate.fromTemplate(
   standaloneQuestionTemplate
 );
+
+////
+const answerTemplate = `You are a helpful and enthusiastic support bot who can answer a given question about "Retail Mail: Physical Standards for Letters, Cards, Flats, and Parcels" based on context provided. Try to find the answer in the context. If you really don't know the answer, say "I'm sorry, I don't know the answer to that." and direct the questioner to  https://www.usps.com. Don't try to make up an answer. Always speak as if you were chatting to a friend.
+context: {context}
+question:{question}
+answer:`;
+
+const answerPrompt = PromptTemplate.fromTemplate(answerTemplate);
+
+////
 
 //take the standaloneQuestionPrompt and PIPE model
 const standaloneQuestionChain = standaloneQuestionPrompt
