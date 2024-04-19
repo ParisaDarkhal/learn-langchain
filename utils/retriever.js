@@ -19,4 +19,5 @@ const vectorStore = new SupabaseVectorStore(embeddings, {
 
 const retriever = vectorStore.asRetriever();
 
-module.exports = { retriever };
+// module.exports = {retriever};
+export default { retriever };
