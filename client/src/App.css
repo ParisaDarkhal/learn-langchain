@@ -1,3 +1,42 @@
+.App {
+  text-align: center;
+}
+
+.App-logo {
+  height: 40vmin;
+  pointer-events: none;
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  .App-logo {
+    animation: App-logo-spin infinite 20s linear;
+  }
+}
+
+.App-header {
+  background-color: #282c34;
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  font-size: calc(10px + 2vmin);
+  color: white;
+}
+
+.App-link {
+  color: #61dafb;
+}
+
+@keyframes App-logo-spin {
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(360deg);
+  }
+}
+/* //////////////////////////////////////////////////////// */
 :root {
   --border-rad-lg: 15px;
   --light-text: #fefefe;
@@ -18,7 +57,7 @@ body {
 
 main {
   background-color: slategray;
-  background-image: url("images/bg.jpg");
+  background-image: url("../src/components/images/bg.jpg");
   background-size: cover;
   background-repeat: no-repeat;
   height: 100vh;
@@ -64,6 +103,7 @@ main {
 .speech {
   padding: 1em;
   max-width: 240px;
+  /* color: var(--light-text); */
   color: var(--light-text);
   min-width: 90%;
   border-radius: var(--border-rad-lg);
@@ -76,12 +116,22 @@ main {
 
 .speech-ai {
   background: #334959;
+  color: var(--light-text);
   border-top-left-radius: 0;
   margin: 1.2em 1em 0 0;
+  text-align: start;
+}
+
+.speech-human {
+  background-color: antiquewhite;
+  color: #282c34;
+  border-top-left-radius: 0;
+  margin: 1.2em 0em 1em 0;
 }
 
 .chatbot-input-container {
   display: flex;
+  margin-top: 1em;
 }
 
 input[type="text"],
@@ -96,6 +146,7 @@ inputp[type="text"] {
   color: var(--light-text);
   width: 100%;
   border-right: 0;
+  margin-top: 1em;
   border-top-right-radius: 0;
   border-bottom-right-radius: 0;
 }
@@ -104,11 +155,13 @@ button {
   border-left: 0;
   border-top-left-radius: 0;
   border-bottom-left-radius: 0;
+  background-color: antiquewhite;
 }
 
 .send-btn-icon {
   width: 20px;
   display: block;
+  background-color: antiquewhite;
 }
 
 /* text */

@@ -1,4 +1,7 @@
+.env
+/backend/.env
+/client/.env
 /.env
-/node_modules
-/package-lock.json
-/package.json
+/backend/node_modules
+/client/node_modules
+package-lock.json
