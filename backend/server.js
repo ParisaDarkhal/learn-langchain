@@ -13,14 +13,12 @@ import { StringOutputParser } from "@langchain/core/output_parsers";
 import { combineDocuments } from "./utils/combineDocuments.js";
 
 import { formatDocumentsAsString } from "langchain/util/document";
-import {
-  RunnableSequence,
-} from "@langchain/core/runnables";
+import { RunnableSequence } from "@langchain/core/runnables";
 import { SupabaseVectorStore } from "@langchain/community/vectorstores/supabase";
 import { OpenAIEmbeddings } from "@langchain/openai";
 import "dotenv/config";
 import { createClient } from "@supabase/supabase-js";
-
+// import vectorStore from "./utils/provider.js";
 
 ////
 
@@ -40,20 +38,18 @@ app.get("/", (req, res) => {
 //////////////////////////////////////////////////////////////////////
 const openAIApiKey = process.env.OPENAI_API_KEY;
 const llm = new ChatOpenAI({ openAIApiKey });
+const sbApiKey = process.env.SUPABASE_PRIVATE_KEY;
+const sbUrl = process.env.SUPABASE_URL;
+const client = createClient(sbUrl, sbApiKey);
+
+const embeddings = new OpenAIEmbeddings({ openAIApiKey });
+const vectorStore = new SupabaseVectorStore(embeddings, {
+  client,
+  tableName: "documents",
+  queryName: "match_documents",
+});
 
 const getRetriever = () => {
-  const embeddings = new OpenAIEmbeddings({ openAIApiKey });
-
-  const sbApiKey = process.env.SUPABASE_KEY;
-  const sbUrl = process.env.SUPABASE_URL;
-  const client = createClient(sbUrl, sbApiKey);
-
-  const vectorStore = new SupabaseVectorStore(embeddings, {
-    client,
-    tableName: "documents",
-    queryName: "match_documents",
-  });
-
   const retriever = vectorStore.asRetriever();
   return retriever;
 };
