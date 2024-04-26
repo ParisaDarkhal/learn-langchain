@@ -21,12 +21,11 @@ const ChatBot = () => {
       ...prevMessages,
       { type: "user", content: userInput },
     ]);
+    //clear the input field after submission
+    setUserInput("");
 
     //call pregressConversation here and update ChatMessages with AI response
     await progressConversation(userInput);
-
-    //clear the input field after submission
-    setUserInput("");
   };
   const progressConversation = async (question) => {
     //call api from backend

@@ -77,8 +77,6 @@ answer:`;
   // or
   // const context = combineDocuments(docs);
 
-  console.log("context :>> ", context);
-
   const ragChain = RunnableSequence.from([
     answerPrompt,
     llm,
