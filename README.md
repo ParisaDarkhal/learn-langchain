@@ -1,6 +1,6 @@
 # Learn LangChain Chatbot
 
-learn-ngChain is a project to create a chatbot designed to showcase the integration of various technologies for building a powerful conversational interface.
+learn-LangChain is a project to create a chatbot designed to showcase the integration of various technologies for building a powerful conversational interface.
 
 ## Demo Video
 <https://youtu.be/zX4H2t1AJ-I>
